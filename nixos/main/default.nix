@@ -39,10 +39,9 @@
 
     libratbag
   ];
-
-
   users.users.lin = {
     isNormalUser = true;
+    initialPassword = "test";
     description = "lin";
     extraGroups = [ "networkmanager" "wheel" "docker" ];
     shell = pkgs.zsh;
@@ -92,7 +91,6 @@
 
   # Allow unfree packages
 
-  nixpkgs.config.allowUnfree = true;
 
   services.xserver.videoDrivers = [ "nvidia" ];
   # TODO: Comment here

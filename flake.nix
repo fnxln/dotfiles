@@ -22,14 +22,17 @@
       inputs.nixpkgs.follows = "nixpkgs";
       url = "github:nix-community/neovim-nightly-overlay";
     };
+    nixos-generators = {
+      url = "github:nix-community/nixos-generators";
+      inputs.nixpkgs.follows = "nixpkgs";
+    };
   };
 
-  outputs = { self, nixpkgs, nixos, home-manager, ... } @inputs:
+  outputs = { self, nixpkgs, nixos, home-manager, nixos-generators, ... } @inputs:
 
     let
       overlays = [
         inputs.neovim-nightly-overlay.overlay
-        (import ./overlays/weechat.nix)
       ];
       config = { allowUnfree = true; };
 
@@ -44,9 +47,31 @@
           modules = [ ];
         };
       };
+      packages.x86_64-linux = {
+        virtualbox = nixos-generators.nixosGenerate {
+          system = "x86_64-linux";
+          pkgs = nixosPackages;
+          modules = [
+            ./nixos/vm
+            ./modules/hyprland.nix
+            home-manager.nixosModules.home-manager
+            {
+              home-manager.useGlobalPkgs = true;
+              home-manager.useUserPackages = true;
+              home-manager.extraSpecialArgs = inputs;
+              home-manager.users.lin = import ./home;
+              # Optionally, use home-manager.extraSpecialArgs to pass
+              # arguments to home.nix
+            }
+          ];
+          format = "virtualbox";
+        };
+      };
       nixosConfigurations = {
         main = nixpkgs.lib.nixosSystem {
           system = "x86_64-linux";
+
+          pkgs = nixosPackages;
           modules = [
             ./nixos/main
             ./modules/hyprland.nix

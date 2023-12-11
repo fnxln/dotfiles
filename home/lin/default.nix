@@ -4,6 +4,7 @@
     ./programs
     ./misc
     ./hyprland
+    ../../modules/neovim
     ./util
   ];
   home = {

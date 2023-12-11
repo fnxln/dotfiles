@@ -1,18 +1,11 @@
 { config, pkgs, ... }:
 {
   imports = [
-    ./hardware-configuration.nix
   ];
   # enable systemd-boot
   boot.loader.systemd-boot.enable = true;
   boot.loader.efi.canTouchEfiVariables = true;
-  # Enable kernel modules
-  boot.extraModulePackages = [
-    config.boot.kernelPackages.v4l2loopback.out
-  ];
-  boot.kernelModules = [ "kvm-intel" "hid-nintendo" "v4l2loopback" ];
-
-  networking.hostName = "main-pc";
+  networking.hostName = "main-vbox";
   # Network related stuff
   networking.networkmanager.enable = true;
   # Set your time zone.
@@ -39,10 +32,9 @@
 
     libratbag
   ];
-
-
   users.users.lin = {
     isNormalUser = true;
+    initialPassword = "test";
     description = "lin";
     extraGroups = [ "networkmanager" "wheel" "docker" ];
     shell = pkgs.zsh;
@@ -53,20 +45,6 @@
 
 
 
-  # Nvidia stuff
-  hardware.nvidia = {
-
-    # Modesetting is required.
-    modesetting.enable = true;
-    open = false;
-
-    # Enable the Nvidia settings menu,
-    # accessible via `nvidia-settings`.
-    nvidiaSettings = true;
-
-    # Optionally, you may need to select the appropriate driver version for your specific GPU.
-    package = config.boot.kernelPackages.nvidiaPackages.stable;
-  };
   hardware.opengl = {
     enable = true;
     driSupport = true;
@@ -92,7 +70,6 @@
 
   # Allow unfree packages
 
-  nixpkgs.config.allowUnfree = true;
 
   services.xserver.videoDrivers = [ "nvidia" ];
   # TODO: Comment here

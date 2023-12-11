@@ -13,6 +13,7 @@
     discord
     vesktop
     megasync
+    neofetch
     noto-fonts-cjk
 
     noto-fonts-emoji
@@ -33,12 +34,10 @@
     thefuck
     obs-studio
     gcc
-    neovide
     python3
     poetry
     fzf
     git
-    neovim
     unrar
     spotify
     waybar
