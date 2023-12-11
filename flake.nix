@@ -86,6 +86,24 @@
             }
           ];
         };
+        t430 = nixpkgs.lib.nixosSystem {
+          system = "x86_64-linux";
+
+          pkgs = nixosPackages;
+          modules = [
+            ./nixos/main
+            ./modules/hyprland.nix
+            home-manager.nixosModules.home-manager
+            {
+              home-manager.useGlobalPkgs = true;
+              home-manager.useUserPackages = true;
+              home-manager.extraSpecialArgs = inputs;
+              home-manager.users.lin = import ./home;
+              # Optionally, use home-manager.extraSpecialArgs to pass
+              # arguments to home.nix
+            }
+          ];
+        };
       };
     };
 }

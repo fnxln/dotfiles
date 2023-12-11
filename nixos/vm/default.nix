@@ -3,8 +3,6 @@
   imports = [
   ];
   # enable systemd-boot
-  boot.loader.systemd-boot.enable = true;
-  boot.loader.efi.canTouchEfiVariables = true;
   networking.hostName = "main-vbox";
   # Network related stuff
   networking.networkmanager.enable = true;

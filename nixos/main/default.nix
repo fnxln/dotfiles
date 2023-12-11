@@ -6,6 +6,9 @@
   # enable systemd-boot
   boot.loader.systemd-boot.enable = true;
   boot.loader.efi.canTouchEfiVariables = true;
+
+  virtualisation.virtualbox.host.enable = true;
+  users.extraGroups.vboxusers.members = [ "user-with-access-to-virtualbox" ];
   # Enable kernel modules
   boot.extraModulePackages = [
     config.boot.kernelPackages.v4l2loopback.out
