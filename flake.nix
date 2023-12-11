@@ -1,8 +1,6 @@
 {
   description = "NixOS configuration";
   nixConfig = {
-    # substituers will be appended to the default substituters when fetching packages
-    # nix com    extra-substituters = [munity's cache server
     extra-substituters = [
       "https://nix-community.cachix.org"
     ];
@@ -13,31 +11,58 @@
 
 
   inputs = {
-    nixpkgs.url = "github:nixos/nixpkgs/nixos-23.11";
-    home-manager.url = "github:nix-community/home-manager";
-    home-manager.inputs.nixpkgs.follows = "nixpkgs";
-  };
+    nixpkgs.url = "nixpkgs/nixpkgs-unstable";
+    nixos.url = "nixpkgs/nixos-unstable";
+    home-manager = {
+      inputs.nixpkgs.follows = "nixpkgs";
+      url = "github:nix-community/home-manager/master";
+    };
 
-
-  outputs = inputs@{ nixpkgs, home-manager, ... }: {
-    nixosConfigurations = {
-      main = nixpkgs.lib.nixosSystem {
-        system = "x86_64-linux";
-        modules = [
-          ./hosts/main
-          ./modules/hyprland.nix
-          home-manager.nixosModules.home-manager
-          {
-            home-manager.useGlobalPkgs = true;
-            home-manager.useUserPackages = true;
-            home-manager.extraSpecialArgs = inputs;
-            home-manager.users.lin = import ./home;
-            # Optionally, use home-manager.extraSpecialArgs to pass
-            # arguments to home.nix
-          }
-        ];
-      };
+    neovim-nightly-overlay = {
+      inputs.nixpkgs.follows = "nixpkgs";
+      url = "github:nix-community/neovim-nightly-overlay";
     };
   };
+
+  outputs = { self, nixpkgs, nixos, home-manager, ... } @inputs:
+
+    let
+      overlays = [
+        inputs.neovim-nightly-overlay.overlay
+        (import ./overlays/weechat.nix)
+      ];
+      config = { allowUnfree = true; };
+
+      nixosPackages = import nixos {
+        system = "x86_64-linux";
+        inherit config overlays;
+      };
+    in
+    {
+      homeConfigurations = {
+        "lin@main" = home-manager.lib.homeManagerConfiguration {
+          modules = [ ];
+        };
+      };
+      nixosConfigurations = {
+        main = nixpkgs.lib.nixosSystem {
+          system = "x86_64-linux";
+          modules = [
+            ./nixos/main
+            ./modules/hyprland.nix
+            home-manager.nixosModules.home-manager
+            {
+              home-manager.useGlobalPkgs = true;
+              home-manager.useUserPackages = true;
+              home-manager.extraSpecialArgs = inputs;
+              home-manager.users.lin = import ./home;
+              # Optionally, use home-manager.extraSpecialArgs to pass
+              # arguments to home.nix
+            }
+          ];
+        };
+      };
+    };
 }
+
 
