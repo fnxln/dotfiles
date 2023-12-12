@@ -81,6 +81,7 @@
   users.users.lin = {
     isNormalUser = true;
     description = "lin";
+    shell = pkgs.zsh;
     extraGroups = [ "networkmanager" "wheel" ];
     packages = with pkgs; [
       firefox
@@ -88,6 +89,7 @@
     #  thunderbird
     ];
   };
+  programs.zsh.enable = true;
 
   # Allow unfree packages
 
