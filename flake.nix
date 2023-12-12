@@ -73,7 +73,7 @@
 
           pkgs = nixosPackages;
           modules = [
-            ./nixos/main
+          ./nixos/main
             ./modules/hyprland.nix
             home-manager.nixosModules.home-manager
             {
@@ -91,7 +91,7 @@
 
           pkgs = nixosPackages;
           modules = [
-            ./nixos/main
+            ./nixos/t430
             ./modules/hyprland.nix
             home-manager.nixosModules.home-manager
             {

@@ -1,4 +1,4 @@
-#!/bin/sh
+#!/usr/bin/env bash
 
 # A bash script designed to run only once dotfiles installed
 

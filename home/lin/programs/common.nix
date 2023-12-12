@@ -12,7 +12,6 @@
     # Internet
     discord
     vesktop
-    megasync
     neofetch
     noto-fonts-cjk
 

@@ -5,7 +5,6 @@
 
     # dunst config
     ".config/dunst" = {
-
       source = ./dunst;
       recursive = true;
     };
@@ -31,6 +30,11 @@
       source = ./wlogout;
       recursive = true;
     };
+    ".config/kitty" = {
+      source = ./kitty;
+      recursive = true;
+    };
+
 
   };
 }
